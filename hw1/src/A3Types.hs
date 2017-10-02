@@ -103,10 +103,10 @@ instance Ord Nat where
   (<=) _     _     = False
 
 instance Num Nat where
-  (+) a Z         = a
-  (+) a (S b)     = S a + b
-  (*) _ Z         = Z
-  (*) a (S b)     = a * b + a
+  (+) a Z     = a
+  (+) a (S b) = S a + b
+  (*) _ Z     = Z
+  (*) a (S b) = a * b + a
   (-) a Z         = a
   (-) Z _         = Z
   (-) (S a) (S b) = a - b
@@ -119,8 +119,8 @@ instance Real Nat where
   toRational a = toRational (toInteger a)
 
 instance Enum Nat where
-  pred Z         = Z
-  pred (S a)     = a
+  pred Z     = Z
+  pred (S a) = a
   fromEnum (S a) = fromEnum a + 1
   fromEnum Z     = 0
   toEnum         = consructToNat toEnum

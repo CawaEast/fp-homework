@@ -12,9 +12,6 @@ eitherConcat = foldMap (either (\a -> (a, mempty)) (\a -> (mempty, a)))
 
 data NonEmpty a = a :| [a] deriving (Eq, Ord, Show, Read)
 
---class Semigroup a where
---    (<>) ::  a -> a -> a
-
 instance Semigroup (NonEmpty a) where
     (<>) (z :| zs) (x :| xs) = z :| (zs ++ [x] ++ xs)
 
@@ -25,7 +22,7 @@ instance Semigroup a => Semigroup (Identity a) where
 
 instance (Semigroup a, Monoid a) => Monoid (Identity a) where
     mappend  = (<>)
-    mempty = Identity mempty
+    mempty   = Identity mempty
 
 newtype Name = Name String deriving (Eq)
 
@@ -33,10 +30,10 @@ instance Semigroup Name where
     (<>) (Name a) (Name b) =  Name (a ++ "." ++ b)
 
 instance Monoid Name where
-    mappend (Name "") a = a
-    mappend a (Name "") = a
-    mappend a b         = (<>) a b
-    mempty = Name ""
+    mappend (Name "") a         = a
+    mappend a         (Name "") = a
+    mappend a         b         = (<>) a b
+    mempty                      = Name ""
 
 newtype Endo a = Endo { getEndo :: a -> a }
 
@@ -45,16 +42,16 @@ instance Semigroup a => Semigroup (Endo a) where
 
 instance (Semigroup a, Monoid a) => Monoid (Endo a) where
     mappend = (<>)
-    mempty = Endo id
+    mempty  = Endo id
 
 newtype Arrow a b = Arrow { getArrow :: a -> b }
 
 instance Semigroup b => Semigroup (Arrow a b) where
     (<>) (Arrow f1) (Arrow f2) =  Arrow (\c -> f1 c <> f2 c)
 
-instance (Semigroup b, Monoid b) => Monoid    (Arrow a b) where
+instance (Semigroup b, Monoid b) => Monoid (Arrow a b) where
     mappend = (<>)
-    mempty = Arrow (const mempty)
+    mempty  = Arrow (const mempty)
 
 --implemented in Tree.hs
 --instance (Ord a) => Semigroup (Tree a) where
