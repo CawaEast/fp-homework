@@ -13,6 +13,9 @@ eitherConcat = foldMap (either (\a -> (a, mempty)) (\a -> (mempty, a)))
 
 data NonEmpty a = a :| [a] deriving (Eq, Ord, Show, Read)
 
+--class Semigroup a where
+--    (<>) ::  a -> a -> a
+
 instance Semigroup (NonEmpty a) where
     (<>) (z :| zs) (x :| xs) = z :| (zs ++ [x] ++ xs)
 
@@ -25,7 +28,7 @@ instance (Semigroup a, Monoid a) => Monoid (Identity a) where
     mappend  = (<>)
     mempty = Identity mempty
 
-newtype Name = Name String
+newtype Name = Name String deriving (Eq)
 
 instance Semigroup Name where
     (<>) (Name a) (Name b) =  Name (a ++ "." ++ b)
@@ -39,11 +42,11 @@ instance Monoid Name where
 newtype Endo a = Endo { getEndo :: a -> a }
 
 instance Semigroup a => Semigroup (Endo a) where
-    (<>) (Endo f1) (Endo f2) =  Endo (\c -> f1 c <> f2 c)
+    (<>) (Endo f1) (Endo f2) =  Endo (\c -> f2 (f1 c))
 
 instance (Semigroup a, Monoid a) => Monoid (Endo a) where
     mappend = (<>)
-    mempty = Endo (const mempty)
+    mempty = Endo id
 
 newtype Arrow a b = Arrow { getArrow :: a -> b }
 
