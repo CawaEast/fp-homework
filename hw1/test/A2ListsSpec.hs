@@ -1,31 +1,31 @@
 module A2ListsSpec where
 
 import           A2Lists
-import           Test.Hspec
 import           Control.Exception (evaluate)
+import           Test.Hspec
 
 spec :: Spec
-spec = do 
+spec = do
     it "removeAt" $ do
         removeAt 1 [1,2,3] `shouldBe` [1,3]
         removeAt 10 [1,2,3] `shouldBe` [1,2,3]
         removeAt 3 [1..5] `shouldBe` [1,2,3,5]
         removeAt 2 "abc" `shouldBe` "ab"
         removeAt 0 "abc" `shouldBe` "bc"
-    
+
     it "removeAtHard" $ do
         removeAtHard 1 [1,2,3] `shouldBe` (Just 2, [1,3])
         removeAtHard 10 [1,2,3] `shouldBe` (Nothing, [1,2,3])
         removeAtHard 3 [1..5] `shouldBe` (Just 4, [1,2,3,5])
         removeAtHard 2 "abc" `shouldBe` (Just 'c', "ab")
         removeAtHard 0 "abc" `shouldBe` (Just 'a', "bc")
-        
+
     it "collectEvery" $ do
         collectEvery 3 [1..8] `shouldBe` ([1,2,4,5,7,8],[3,6])
         collectEvery 2 [1..8] `shouldBe` ([1,3,5,7], [2,4,6,8])
         collectEvery 1 [1..8] `shouldBe` ([], [1,2,3,4,5,6,7,8])
         collectEvery 10 [1..8] `shouldBe` ([1,2,3,4,5,6,7,8], [])
-    
+
     it "stringSumGood" $ do
         stringSum "1 1" `shouldBe` 2
         stringSum "100\n\t-3" `shouldBe` 97
@@ -59,7 +59,7 @@ spec = do
         evaluate (stringSumHard "-+1") `shouldThrow` anyException
         evaluate (stringSumHard "+-1") `shouldThrow` anyException
         evaluate (stringSumHard "1 + 1") `shouldThrow` anyException
-    
+
     it "mergeSort" $ do
         mergeSort [2, 1, 0, 3, 10, 5] `shouldBe` [0, 1, 2, 3, 5, 10]
         mergeSort [1, 2, 3] `shouldBe` [1, 2, 3]

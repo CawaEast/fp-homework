@@ -1,12 +1,9 @@
 module A4Fold where
 
-import           TreePrinters (Tree (..))
+import           Tree (Tree (..))
 
-instance Foldable Tree where
-    foldMap _ Leaf         = mempty
-    foldMap f (Node k l r) = foldMap f l `mappend` f k `mappend` foldMap f r
-    foldr _ z Leaf         = z
-    foldr f z (Node k l r) = foldr f (f k (foldr f z r)) l
+--implemented in Tree.hs
+--instance Foldable Tree where
 
 toList :: (Ord a) => Tree a -> [a]
 toList = foldMap (: [])

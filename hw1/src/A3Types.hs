@@ -1,7 +1,7 @@
 module A3Types where
 
-import           TreePrinters (Tree (..))
-import           Data.List(sort)
+import           Data.List (sort)
+import           Tree      (Tree (..))
 
 data DayOfWeek = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
                    deriving (Eq, Ord, Show, Read, Bounded, Enum)
@@ -22,32 +22,31 @@ class Fighter e where
     ad :: e -> Int
     name :: e -> String
     isBrave :: e -> Bool
-    
+
 data Knight = Knight String Int Int
-    
-instance Fighter Knight where 
+
+instance Fighter Knight where
     hp (Knight _ h _) = h
     ad (Knight _ _ a) = a
     name (Knight n _ _) = n
     isBrave _ = True
 
 data Monster = Monster Int Int
-    
-instance Fighter Monster where 
+
+instance Fighter Monster where
     hp (Monster h _) = h
     ad (Monster _ a) = a
     name (Monster _ _) = "Name??? Just monster."
     isBrave _ = False
 
-fight :: (Fighter tf1, Fighter tf2) => tf1 -> tf2 -> ((Either tf1 tf2), Int)
---fight (Monster d e) (Knight a b c) = fight (Knight a b c) (Monster d e)
+fight :: (Fighter tf1, Fighter tf2) => tf1 -> tf2 -> (Either tf1 tf2, Int)
 fight f1 f2 = checkLast f1 f2
     where
-        hp2b = if (isBrave f2) && (not(isBrave f1)) then hp f2 + ad f1 else hp f2
+        hp2b = if isBrave f2 && not (isBrave f1) then hp f2 + ad f1 else hp f2
         initR = min (div (hp f1) (ad f2)) (div hp2b (ad f1))
         hp1 = hp f1 - initR * ad f2
         hp2 = hp2b- initR * ad f1
-        checkLast :: (Fighter tf1, Fighter tf2) =>tf1 -> tf2 -> ((Either tf1 tf2), Int)
+        checkLast :: (Fighter tf1, Fighter tf2) =>tf1 -> tf2 -> (Either tf1 tf2, Int)
         checkLast ff1 ff2
             | hp2 == 0          = (Left ff1, initR)
             | hp1 == 0          = (Right ff2, initR)

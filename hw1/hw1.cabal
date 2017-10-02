@@ -24,6 +24,7 @@ library
                     ,  A4Fold
                     ,  A5Monoids
                     ,  TreePrinters
+                    ,  Tree
   ghc-options:         -Wall
   build-depends:       base >= 4.9 && < 5
                      , random
