@@ -43,7 +43,7 @@ fight :: (Fighter tf1, Fighter tf2) => tf1 -> tf2 -> (Either tf1 tf2, Int)
 fight f1 f2 = checkLast f1 f2
   where
     hp2b = if isBrave f2 && not (isBrave f1) then hp f2 + ad f1 else hp f2
-    initR = min (div (hp f1) (ad f2)) (div hp2b (ad f1))
+    initR = min (hp f1 `div` ad f2) (hp2b `div` ad f1)
     hp1 = hp f1 - initR * ad f2
     hp2 = hp2b  - initR * ad f1
     checkLast :: (Fighter tf1, Fighter tf2) => tf1 -> tf2 -> (Either tf1 tf2, Int)
@@ -178,4 +178,7 @@ fromList t = sortedToList $ sort t
     sortedToList :: (Ord a) => [a] -> Tree a
     sortedToList []  = Leaf
     sortedToList [a] = Node a Leaf Leaf
-    sortedToList t2  = (\l -> Node (t2 !! l) (sortedToList $ take l t2) (sortedToList $ drop (l + 1) t2)) $ div (length t2) 2
+    sortedToList t2  = (\l -> Node (t2 !! l) 
+        (sortedToList $ take l t2) 
+        (sortedToList $ drop (l + 1) t2)) $ 
+        div (length t2) 2
