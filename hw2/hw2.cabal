@@ -18,7 +18,12 @@ tested-with:         GHC == 8.0.1
 
 library
   hs-source-dirs:      src
-  exposed-modules:     B1Math
+  exposed-modules:     B1Math,
+                       B2NonDetMath,
+                       B3Monad,
+                       B3MonadFish,
+                       B3MonadJoin,
+                       B4Identity
   ghc-options:         -Wall
   build-depends:       base >= 4.9 && < 5
   default-language:    Haskell2010

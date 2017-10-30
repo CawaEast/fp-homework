@@ -56,7 +56,7 @@ total f = Partial $ Just . f
 apply       :: (a ~> b) -> a -> Maybe b
 apply (Partial f) a = f a
 apply (Defaulted f b) a = Just $ fromMaybe b $ apply f a
--- apply $ Partial $ apply f  = apply f => f = Partial $ apply f
+-- apply $ Partial $ apply f  ≡ apply f => f ≡ Partial $ apply f
 
 applyOrElse :: (a ~> b) -> a -> b -> b
 applyOrElse f a b = fromMaybe b $ apply f a
@@ -77,23 +77,23 @@ instance C.Category (~>) where
   id = Partial return
   -- id . f = f . id = f  
   -- id . f = f
-  -- Partial $ apply (Partial return) <=< apply f ==    (Rule : apply (Partial f) == f)
-  -- Partial $ return <=< apply f ==                    (Rule: return <=< g == g)
-  -- Partial $ apply f ==                               (Rule : apply (Partial f) == f)
+  -- Partial $ apply (Partial return) <=< apply f ≡    (Rule : apply (Partial f) ≡ f)
+  -- Partial $ return <=< apply f ≡                    (Rule: return <=< g ≡ g)
+  -- Partial $ apply f ≡                               (Rule : apply (Partial f) ≡ f)
   -- f
   
   -- f . id = f
-  -- Partial $ apply f <=< apply (Partial return) ==    (Rule : apply (Partial f) == f)
-  -- Partial $ apply f <=< return ==                    (Rule: g <=< return == g)
-  -- Partial $ apply f ==                               (Rule : apply (Partial f) == f)
+  -- Partial $ apply f <=< apply (Partial return) ≡    (Rule : apply (Partial f) ≡ f)
+  -- Partial $ apply f <=< return ≡                    (Rule: g <=< return ≡ g)
+  -- Partial $ apply f ≡                               (Rule : apply (Partial f) ≡ f)
   -- f
   
   -- (.):: b~>c -> a~>b -> a~>c
   (.) f g = Partial $ apply f <=< apply g 
-  -- f . (g . h) == (f . g) . h
-  -- Partial $ apply f <=< apply (Partial $ apply g <=< apply h) ==    
+  -- f . (g . h) ≡ (f . g) . h
+  -- Partial $ apply f <=< apply (Partial $ apply g <=< apply h) ≡    
   -- Partial $ apply (Partial $ apply f <=< apply g) <=< apply h =>
-  --                                                    (Rule : apply (Partial f) == f)
-  -- Partial $ (apply f <=< apply g) <=< apply h ==    
+  --                                                    (Rule : apply (Partial f) ≡ f)
+  -- Partial $ (apply f <=< apply g) <=< apply h ≡    
   -- Partial $ apply f <=< (apply g <=< apply h)
-  --                                                    (Rule : (f <=< g) <=< h == f <=< (g <= h))
+  --                                                    (Rule : (f <=< g) <=< h ≡ f <=< (g <= h))
