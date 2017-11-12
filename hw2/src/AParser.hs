@@ -63,7 +63,6 @@ p2pspParser = fmap (\a ->(\b ->[a, b]))
 intPair :: Parser [Integer]
 intPair = p2pspParser posInt <* (satisfy isSpace) <*> posInt
 
-
 instance Applicative Parser => Alternative Parser where 
   empty = Parser (\_ -> Nothing)
   (Parser f1) <|> (Parser f2) =  Parser (\text -> (f1 text) <|> (f2 text))
