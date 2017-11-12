@@ -23,7 +23,20 @@ library
                        B3Monad,
                        B3MonadFish,
                        B3MonadJoin,
-                       B4Identity
+                       B4Identity,
+                       AParser,
+                       SExpr,
+                       LetParser
   ghc-options:         -Wall
   build-depends:       base >= 4.9 && < 5
+  default-language:    Haskell2010
+  
+test-suite hw2-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  other-modules:       SimpleSpec
+  build-depends:       base
+                    ,  hw2
+                    ,  hspec
   default-language:    Haskell2010

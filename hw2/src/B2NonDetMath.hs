@@ -1,11 +1,5 @@
-{-# LANGUAGE TypeOperators #-}
-
 module B2NonDetMath where
 
---import Control.Monad ((<=<))
---import Data.Maybe (fromMaybe, isJust)
-
---import qualified Control.Category as C
 
 bin :: Int -> [[Int]]
 bin 0 = [[]]

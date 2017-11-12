@@ -13,15 +13,15 @@ data Expr = Const Int
   | Binary (Int -> Int -> (Either Error Int)) Expr Expr
 --  | BinaryMon (Int -> Either String (Int -> (Either String Int))) Expr Expr
   
-data Error = DivByZero | NegExp deriving (Show) 
+data Error = DivByZero | NegExp deriving (Show, Eq) 
   
-calc :: Expr -> (Either Error Int)
+eval :: Expr -> (Either Error Int)
 --calc (Common f a) = (map eval a) >>= f
 --calc (Unary f a) = Common (\e -> f (head e)) [a]
 --calc (Binary f a b) = Common (\e -> f (head e) (f head $ tail e)) [a, b]
-calc (Unary f a) = (calc a) >>= f
-calc (Binary f a b) = either Left (\half -> calc $ Unary (f half) b) $ (calc a)
-calc (Const a) = Right a
+eval (Unary f a) = (eval a) >>= f
+eval (Binary f a b) = either Left (\half -> eval $ Unary (f half) b) $ (eval a)
+eval (Const a) = Right a
 
 add1 :: Expr -> Expr -> Expr
 add1 = Binary (\a b -> Right (a + b)) 
@@ -96,4 +96,4 @@ instance C.Category (~>) where
   --                                                    (Rule : apply (Partial f) ≡ f)
   -- Partial $ (apply f <=< apply g) <=< apply h ≡    
   -- Partial $ apply f <=< (apply g <=< apply h)
-  --                                                    (Rule : (f <=< g) <=< h ≡ f <=< (g <= h))
+  --                                                    (Rule : (f <=< g) <=< h ≡ f <=< (g <=< h))

@@ -53,7 +53,6 @@ instance Monad     m => MonadFish m where
     -- f >=> returnFish         ≡
     -- \a -> f a >>= returnFish ≡
     -- \a -> f a >>= return     ≡
-    -- \a -> f a >>= return     ≡
     -- \a -> f a                ≡
     -- f
     
