@@ -23,8 +23,6 @@ data Expr
     = Lit Integer
     | Var String
     | Let String Expr Expr 
-    | Mut String Expr Expr 
-    | ReMut String Expr Expr 
     | Add Expr Expr  
     | Sub Expr Expr  
     | Mul Expr Expr  
@@ -39,17 +37,6 @@ data Variable = Variable Bool String Integer
 
 --data Enviroment = Env (Result [VarType])
 data Enviroment = Env (State String (Result Integer))
-
---getVars :: Enviroment -> Result[VarType]
---getVars (Env l) = Right l
-
---putVar :: VarType -> Enviroment -> Enviroment
---putVar p (Env l) = Env (fmap (p:) l)
-
---putMaybeVar :: Result VarType -> Enviroment -> Enviroment
---putMaybeVar p (Env l) = Env ((:) <$> p <*> l)
-
-
 
 putVal ::  Enviroment -> VarType -> Enviroment
 putVal (Env l) (a, b) = Env (state func)
@@ -69,12 +56,16 @@ errorEnv :: MyError -> Enviroment
 errorEnv e = (Env $ state (\q ->(throwError e, q)))
 
 putMut :: Enviroment -> VarType -> Enviroment 
-putVal (Env l) (a, b) = Env (state func)
-  where
-    --func :: String -> (State String (Result Integer))
-    func = (\name -> if name == a then throwError VarHasBeenSet else runState l a)
+putMut (Env l) (a, b) = Env (state (\name -> 
+    if (fst $ runState l a) == throwError VarNotFound
+    then (return b, a)
+    else ((fst $ runState l a) >>= (\n -> (throwError VarHasBeenSet)), name)))
 
-
+putReMut :: Enviroment -> VarType -> Enviroment 
+putReMut (Env l) (a, b) = Env $ state (\name -> (((fst $ runState l name) >>= (\res ->  if name == a 
+                                                                                        then return b
+                                                                                        else return res)), name))
+    
 data MyError    
     = SomeInitianError
     | VarNotFound
