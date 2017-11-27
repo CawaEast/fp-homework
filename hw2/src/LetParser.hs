@@ -10,8 +10,8 @@ import           Data.List(find, intercalate, reverse)
 import           Control.Applicative(Applicative(..))
 --import Data.Functor(Functor)
 
--- instance Applicative Parser => Monad Parser where
-    -- return a = Parser (\text -> Just (a, text))
+instance Applicative Parser => Monad Parser where
+    return a = Parser (\text -> Just (a, text))
     -- return a >>= f ≡ f a
     -- Parser (\text -> Just (a, text)) >>= f
     -- Parser $ join . fmap (uncurry runParser . first f) . (\text -> Just (a, text))
@@ -23,8 +23,8 @@ import           Control.Applicative(Applicative(..))
     -- Parser (runParser (f a)))
     -- f a
     
-    -- Parser a -> (a -> Parser b) -> Parser b
-    -- (>>=) (Parser f1) f2 = Parser $ join . fmap (uncurry runParser . first f2) . f1
+    Parser a -> (a -> Parser b) -> Parser b
+    (>>=) (Parser f1) f2 = Parser $ join . fmap (uncurry runParser . first f2) . f1
 
 -- type Ident = String
 

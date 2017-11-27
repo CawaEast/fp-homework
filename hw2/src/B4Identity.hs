@@ -111,7 +111,7 @@ class (Functor t, Foldable t) => Traversable t where
 instance Traversable Identity where
     -- (runIdentity arg) = (t b) => pure pure <*> (t b) = Identity (t b)
     --traverse f a = sequenceA id
-    sequenceA a  = pure pure <*> runIdentity a
+    sequenceA a  = fmap pure (runIdentity a)
     
     -- 1. (t . sequenceA) arg ≡ (sequenceA . fmap t) arg
     

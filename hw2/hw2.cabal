@@ -24,6 +24,10 @@ library
                        B3MonadFish,
                        B3MonadJoin,
                        B4Identity,
+                       B4Tree,
+                       B4Const,
+                       B4Pair,
+                       B4Either,
                        AParser,
                        SExpr,
                        LetParser
@@ -35,7 +39,8 @@ test-suite hw2-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       SimpleSpec
+  other-modules:       SimpleSpec,
+                       ParserSpec
   build-depends:       base
                     ,  hw2
                     ,  hspec

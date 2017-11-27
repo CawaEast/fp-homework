@@ -64,12 +64,13 @@ aParser :: Parser Char
 aParser = satisfyC 'a'
 bParser :: Parser Char
 bParser = satisfyC 'b'
-p2mpParser :: Parser a -> Parser (b -> (a, b))
-p2mpParser = fmap (\a b -> (a, b))
+--p2mpParser :: Parser a -> Parser (b -> (a, b))
+--p2mpParser = fmap (\a b -> (a, b))
 clearParser :: Parser a -> Parser ()
 clearParser = fmap (const ()) 
 abParser :: Parser(Char, Char)
-abParser = p2mpParser aParser <*> bParser
+abParser = (,) <$> aParser <*> bParser
+--abParser = p2mpParser aParser <*> bParser
 abParser_ :: Parser ()
 abParser_ = clearParser abParser
 
@@ -81,19 +82,27 @@ posInt = Parser f
       | otherwise = Just (read ns, rest)
       where (ns, rest) = span isDigit xs
       
-skipNonDigits :: Parser ()
-skipNonDigits = clearParser (satisfy isSpace)
+--skipNonDigits :: Parser ()
+--skipNonDigits = clearParser (satisfy isSpace)
 
-p2pspParser :: Parser a -> Parser (b -> (a -> [a]))
-p2pspParser = fmap (\a _ b ->[a, b])
+--p2pspParser :: Parser a -> Parser (b -> (a -> [a]))
+--p2pspParser = fmap (\a _ b ->[a, b])
 
 intPair :: Parser [Integer]
-intPair = p2pspParser posInt <*> skipNonDigits <*> posInt
+--intPair = p2pspParser posInt <*> skipNonDigits <*> posInt
+--intPair = (\a _ c -> [a, c]) <$> posInt <*> satisfy isSpace <*> posInt
+intPair = (\a c -> [a, c]) <$> posInt <* satisfy isSpace <*> posInt
 
 
 instance Applicative Parser => Alternative Parser where 
   empty = Parser (const Nothing)
   (Parser f1) <|> (Parser f2) =  Parser (\text -> f1 text <|> f2 text)
+  
+  -- (empty) <|> (Parser f2) ≡ Parser f2
+  -- Parser (const Nothing) <|> (Parser f2) ≡
+  -- Parser (\text -> Nothing <|> f2 text) ≡
+  -- Parser (\text -> f2 text) ≡
+  -- Parser f2 
   
 upperParser :: Parser Char  
 upperParser = satisfy isUpper
