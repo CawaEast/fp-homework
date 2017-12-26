@@ -1,10 +1,9 @@
 {-# LANGUAGE TemplateHaskell    #-}
 
 
-module TextModule where
+module TextModule(Testing(..)) where
 
-import TH_L1(makeShowText, showText)
-import qualified Data.Text as T
+import TH_L1(makeShowText)
 
 
 data Testing = Testing deriving Show
